@@ -33,13 +33,13 @@ impl Player {
 
     pub fn from_file(file: &mut File) -> Player {
         let mut s = String::new();
-        file.read_to_string(&mut s)
-            .expect("Fucking File Read Error!");
-        println!("{}", s);
-        let s: Vec<&str> = s.split('\n').collect();
-        println!("{:?}", s);
-        //todo
-        let name = s.get(0);
+        file.read_to_string(&mut s).expect("File Read Error!");
+        println!("{}", &s); //all
+        let collection = s.lines().collect::<Vec<&str>>();
+        let collection = collection.get(0).unwrap();
+        let collection: Vec<&str> = collection.split(' ').collect();
+        let collection = collection.get(1).unwrap();
+        let name: String = collection.to_string();
         let p = Player {
             name,
             age: 45,
