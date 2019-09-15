@@ -1,33 +1,39 @@
 use crate::player::*;
 use console::Term;
 use std::fs::*;
-use std::io::prelude::*;
 
 pub fn input() -> String {
     let term = Term::stdout();
-    term.read_line().unwrap().trim().to_owned()
+    term.read_line().expect("input error").trim().to_owned()
 }
 
 pub fn key_to_continue() {
     println!("Press any key to continue");
-    console::Term::stdout().read_key().unwrap();
+    console::Term::stdout()
+        .read_key()
+        .expect("key continue error");
 }
 
 pub fn load_game() {
-    println!("Well who are you going to play as?");
-
-    println!("Input the character you want to play(You did make a character, riight?)..");
+    println!("Input the character you want to play\n(You did make a character, riiight?)..");
 
     let name = input();
 
     if !std::path::Path::new(&format!("saves/{}.txt", name)).exists() {
-        println!("YOU CANNOT PLAY WITHOUT A CHAR YOU NOOB!");
+        println!("YOU CANNOT PLAY WITHOUT A CHARACTER YOU NOOB!");
         key_to_continue();
         return;
     }
+    let mut file = File::open(format!("saves/{}.txt", name)).expect("File error");
+    let player = Player::from_file(&mut file)
+        .expect("Could not load character from file! Line 30 of game.rs");
+    println!("{}", player.summary());
 
-    println!("So this game is a randomized rpg adventure game! You will die and your character will be deleted on death!\nHowever don't be afraid as you can always make a new one and play again and get a totally different random start!");
-
+    println!("So this game is a randomized rpg adventure game!");
+    key_to_continue();
+    println!("You will die and your character will be deleted on death!");
+    key_to_continue();
+    println!("However don't be afraid as you can always make a new one and play again and get a totally different random start!");
     key_to_continue();
 }
 
@@ -48,8 +54,6 @@ pub fn character_creator() {
         break n;
     };
 
-    let format = format!("saves/{}.txt", name);
-
     let mut selection = 1;
     let max = 3;
     let mut gender = Gender::Other;
@@ -66,7 +70,7 @@ pub fn character_creator() {
             _ => term.write_line("1: Male\n2: Female\n3: Other").unwrap(),
         }
 
-        let k = term.read_key().unwrap();
+        let k = term.read_key().expect("key error 1");
 
         if k == console::Key::ArrowUp {
             selection -= 1;
@@ -124,7 +128,10 @@ pub fn character_creator() {
 
         println!("P, T, or M?");
 
-        let input = term.read_char().unwrap().to_ascii_uppercase();
+        let input = term
+            .read_char()
+            .expect("read char error")
+            .to_ascii_uppercase();
 
         let point = if input == 'P' || input == 'T' || input == 'M' {
             points_left -= 1;
@@ -143,22 +150,13 @@ pub fn character_creator() {
         }
     }
 
-    println!("Ok! Here is your character Page!\n{}", p1);
+    println!("Ok! Here is your character Page!\n{}", p1.summary());
 
     println!("Creating save data for {}.", p1.name);
 
-    let mut file = File::create(format).expect("Failed to create player file.");
-
-    let s = format!(
-        "Name: {}\nAge: {}\nGender: {}\nStats: {}",
-        p1.name, p1.age, p1.gender, p1.stats,
-    );
-
-    println!("{}", s);
-
-    file.write_all(s.as_bytes()).expect("Fucking Error!");
+    Player::to_file(&p1);
 
     println!("Player file created!");
 
-    term.read_key().unwrap();
+    key_to_continue();
 }
