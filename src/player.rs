@@ -117,11 +117,11 @@ impl Summarizable for Stats {
     }
 }
 
-impl std::fmt::Display for dyn Summarizable {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.summary())
-    }
-}
+// impl std::fmt::Display for dyn Summarizable {
+//     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+//         write!(f, "{}", self.summary())
+//     }
+// }
 
 impl Summarizable for Player {
     fn summary(&self) -> String {
@@ -176,33 +176,3 @@ impl Stats {
         }
     }
 }
-
-// impl std::fmt::Display for Stats {
-//     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-//         write!(
-//             f,
-//             "(Physique: {}, Technique: {}, Mystique: {})",
-//             self.physique, self.technique, self.mystique,
-//         )
-//     }
-// }
-
-// impl std::fmt::Display for Player {
-//     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-//         write!(
-//             f,
-//             "Name: {}\nGender: {}\nAge: {}\nStats: {}\nQuests: {:?}\n",
-//             self.name, self.gender, self.age, self.stats, self.quests
-//         )
-//     }
-// }
-
-// impl std::fmt::Display for Gender {
-//     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-//         match self {
-//             Gender::Male => write!(f, "Male"),
-//             Gender::Female => write!(f, "Female"),
-//             Gender::Other => write!(f, "Other"),
-//         }
-//     }
-// }
