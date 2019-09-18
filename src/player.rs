@@ -117,11 +117,11 @@ impl Summarizable for Stats {
     }
 }
 
-// impl std::fmt::Display for dyn Summarizable {
-//     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-//         write!(f, "{}", self.summary())
-//     }
-// }
+impl std::fmt::Display for dyn Summarizable {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.summary())
+    }
+}
 
 impl Summarizable for Player {
     fn summary(&self) -> String {
