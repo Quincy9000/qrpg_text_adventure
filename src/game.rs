@@ -35,6 +35,25 @@ pub fn load_game() {
     key_to_continue();
     println!("However don't be afraid as you can always make a new one and play again and get a totally different random start!");
     key_to_continue();
+
+    let mut level = 0i32;
+
+    loop {
+        if level == 0 {
+            checkQuests(&player);
+            level = 1;
+        } else if level == 1 {
+        }
+    }
+}
+
+pub fn checkQuests(p: &Player) {
+    if p.quests.is_empty() {
+        println!("It appears you do not have any Quests!");
+        key_to_continue();
+        println!("Time to go to the cabin and pick some out!");
+        key_to_continue();
+    }
 }
 
 pub fn character_creator() {
