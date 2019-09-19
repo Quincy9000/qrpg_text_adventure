@@ -27,7 +27,7 @@ pub fn load_game() {
     let mut file = File::open(format!("saves/{}.txt", name)).expect("File error");
     let player = Player::from_file(&mut file)
         .expect("Could not load character from file! Line 30 of game.rs");
-    println!("{}", player.summary());
+    println!("{}", player);
 
     println!("So this game is a randomized rpg adventure game!");
     key_to_continue();
@@ -169,7 +169,7 @@ pub fn character_creator() {
         }
     }
 
-    println!("Ok! Here is your character Page!\n{}", p1.summary());
+    println!("Ok! Here is your character Page!\n{}", p1);
 
     println!("Creating save data for {}.", p1.name);
 

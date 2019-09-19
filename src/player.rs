@@ -2,10 +2,6 @@ use std::fmt;
 use std::fs::File;
 use std::io::prelude::*;
 
-pub trait Summarizable {
-    fn summary(&self) -> String;
-}
-
 pub enum Gender {
     Male,
     Female,
@@ -45,8 +41,8 @@ impl Player {
             "Name: {}\nAge: {}\nGender: {}\nStats: {}\nQuests: {}",
             player.name,
             player.age,
-            player.gender.summary(),
-            player.stats.summary(),
+            player.gender,
+            player.stats,
             player.quests.summary(),
         );
 
@@ -108,40 +104,40 @@ impl Player {
     }
 }
 
-impl Summarizable for Stats {
-    fn summary(&self) -> String {
-        format!(
+pub trait Summarizable {
+    fn summary(&self) -> String;
+}
+
+impl fmt::Display for Stats {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(
+            f,
             "(Physique: {}, Technique: {}, Mystique: {})",
             self.physique, self.technique, self.mystique,
         )
     }
 }
 
-impl std::fmt::Display for dyn Summarizable {
+impl fmt::Display for Player {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.summary())
-    }
-}
-
-impl Summarizable for Player {
-    fn summary(&self) -> String {
-        format!(
+        write!(
+            f,
             "Name: {}\nGender: {}\nAge: {}\nStats: {}\nQuests: {}\n",
             self.name,
-            self.gender.summary(),
+            self.gender,
             self.age,
-            self.stats.summary(),
+            self.stats,
             self.quests.summary(),
         )
     }
 }
 
-impl Summarizable for Gender {
-    fn summary(&self) -> String {
+impl fmt::Display for Gender {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match self {
-            Gender::Male => format!("Male"),
-            Gender::Female => format!("Female"),
-            Gender::Other => format!("Other"),
+            Gender::Male => write!(f, "Male"),
+            Gender::Female => write!(f, "Female"),
+            Gender::Other => write!(f, "Other"),
         }
     }
 }
